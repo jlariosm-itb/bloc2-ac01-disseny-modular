@@ -5,7 +5,7 @@ public class Program
     public static void Main()
     {
        //Constants
-        const string NumberOne = "Input a number pls:";
+        const string NumberOne = "Input a number please:";
         const string MinRange = "Enter the minimun number of the range:";
         const string MaxRange = "Enter the maximun number of the range:";
         const string InvalidInput = "Invalid input please try again...";
@@ -35,10 +35,6 @@ public class Program
         {
             Console.WriteLine(InvalidRange);
         }
-
-
-
-
     }
 
     public static int ValidNumberInput(string text)
