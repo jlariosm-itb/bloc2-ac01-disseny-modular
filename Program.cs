@@ -27,7 +27,7 @@ public class Program
             Console.WriteLine(InvalidInput);
         }
 
-        if (NumberInRange(num, minRange, maxRange))
+        if (NumberInRange(num, minRange, maxRange)) // Deberia ser ternaria.
         {
             Console.WriteLine(ValidRange);
         }
@@ -46,7 +46,7 @@ public class Program
         return num;
     }
 
-    public static bool NumberInRange(int num, int minRange, int maxRange)
+    public static bool NumberInRange(int num, int minRange, int maxRange) //Ternaria tmb
     {
         
         if (num < maxRange && num > minRange)
