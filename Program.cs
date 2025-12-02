@@ -2,109 +2,58 @@
 
 public class Program
 {
+    const string CostMessage = "Parking cost: ";
+    const string HourPrompt = "Please enter the hours you parked: ";
+    const string MinutePrompt = "Please enter the minutes you parked: ";
+    const string InvalidInputMessage = "Invalid input. Please enter valid hours and minutes.";
+    const double FirstHourRate = 3.50;
+    const double SecondToFifthHourRate = 2.00;
+    const double SixthHourOnwardRate = 1.50;
+
     public static void Main()
     {
-        //Constants
-        const string TempUser = "Please dear user input a decimal temperature: ";
-        const string ConverUser = "What type of convertion do you want to do:";
-        const string InputErrorMessage = "Invalid input. Please enter a number between 0 and 3.";
-        const string CelFar = "{0} degrees Celsius is {1} degrees Fahrenheit.";
-        const string FarCel = "{0} degrees Fahrenheit is {1} degrees Celsius.";
-        const string Kevin = "{0} degrees Celsius is {1} degrees Kelvin.";
-        const string TriesExcd = "Too many invalid attempts. Exiting program.";
+        Console.OutputEncoding = System.Text.Encoding.Unicode;
+        int hours = 0;
+        int minutes = 0;
 
-
-        //Variables
-        string[] Menu = { "1: Celsius to Fahrenheit", "2: Fahrenheit to Celsius", "3: Celsius to Kelvin", "0: Exit" };
-        double temp = 0, op = 0;
-        bool validInput;
-        int tries = 0;
-
-        //Program
-        Console.WriteLine(TempUser);
-        temp = Convert.ToDouble(Console.ReadLine()); //Hector the maginificant helped me with the use of convert.
-        Console.WriteLine(ConverUser);
-        MenuFunction(Menu);
-        do
+        Console.Write(HourPrompt);
+        while (!int.TryParse(Console.ReadLine(), out hours) || hours < 0)
         {
-            
-            validInput = true;
-            try
-            {
-                op = Convert.ToInt32(Console.ReadLine());
-                if (op < 0 || op > 3)
-                {
-                    Console.WriteLine(InputErrorMessage);
-                    validInput = false;
-                    tries++;
-                }
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine(InputErrorMessage);
-                validInput = false;
-                tries++;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine(InputErrorMessage);
-                validInput = false;
-                tries ++;
-            }
-
-            if (validInput)
-            {
-                Console.WriteLine();
-            }
-
-            switch (op)
-            {
-                case 1:
-                    FunCelFar(CelFar, temp);
-                    break;
-                case 2:
-                    FunFarCel(FarCel, temp);
-                    break;
-                case 3:
-                    FunKal(Kevin, temp);
-                    break;
-            }
-        } while (op != 0 && tries < 3);
-
-        if (tries >= 3)
-        {
-            Console.WriteLine(TriesExcd);
+            Console.WriteLine(InvalidInputMessage);
+            Console.Write(HourPrompt);
         }
 
-        static void MenuFunction(string[] Menu)
+        Console.Write(MinutePrompt);
+        while (!int.TryParse(Console.ReadLine(), out minutes) || minutes < 0 || minutes >= 60)
         {
-            for (int i = 0; i < Menu.Length; i++)
-            {
-                Console.WriteLine(Menu[i]);
-            }
+            Console.WriteLine(InvalidInputMessage);
+            Console.Write(MinutePrompt);
         }
 
-        static void FunCelFar(string CelFar, double temp)
-        {
-            double fahr = 0;
-            fahr = (temp * 9 / 5) + 32;
-            Console.WriteLine(CelFar, temp, fahr);
-        }
+        double totalCost = CalculateParkingCost(hours, minutes);
 
-        static void FunFarCel(string FarCel, double temp)
-        {
-            double cel = 0;
-            cel = ((temp - 32) * (5 / 9));
-            Console.WriteLine(FarCel, temp, cel);
-        }
-
-        static void FunKal(string Kevin, double temp)
-        {
-            double kel = 0;
-            kel = temp + 273.15;
-            Console.WriteLine(Kevin, temp, kel);
-        }
+        Console.WriteLine(CostMessage + totalCost + "€");
     }
 
-}
+    public static double CalculateParkingCost(int hours, int minutes)
+    {
+        double totalCost = 0;
+        double additionalHours = minutes / 60.0;
+        double totalHours = hours + additionalHours;
 
+        if (totalHours <= 1)
+        {
+            totalCost = FirstHourRate;
+        }
+        else if (totalHours <= 5)
+        {
+            totalCost = FirstHourRate + (totalHours - 1) * SecondToFifthHourRate;
+        }
+        else
+        {
+            totalCost = FirstHourRate + (4 * SecondToFifthHourRate) + (totalHours - 5) * SixthHourOnwardRate;
+        }
+
+        return Math.Round(totalCost, 2);
+    }
+}
